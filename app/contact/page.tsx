@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { Suspense, useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -20,7 +20,7 @@ const inquiryTypes = [
   { value: "other", label: "General Inquiry" },
 ]
 
-export default function ContactPage() {
+function ContactPageContent() {
   const searchParams = useSearchParams()
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -277,5 +277,21 @@ export default function ContactPage() {
 
       <Footer />
     </div>
+  )
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="pt-32 pb-16 px-6 max-w-7xl mx-auto">
+          <p className="text-muted-foreground">Loading contact form...</p>
+        </div>
+        <Footer />
+      </div>
+    }>
+      <ContactPageContent />
+    </Suspense>
   )
 }
